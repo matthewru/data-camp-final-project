@@ -1,0 +1,27 @@
+---
+title: "player_overview"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+library(countrycode)
+```
+
+```{r}
+raw_player_data <- read_csv("player_overviews.csv")
+raw_player_data_current <- read_csv("atp_players.csv", col_names = c("player_id", "first_name", "last_name", "hand", "birth_date", "country_code"))
+clean_player_data_current <- raw_player_data_current %>% 
+  mutate(birth_date = parse_datetime(as.character(birth_date), format = "")) %>% 
+  mutate(country = countrycode(country_code, origin = "iso3c", destination = "country.name")) %>% 
+  filter(!is.na(birth_date)) %>% 
+  filter(!is.na(country))
+
+grouped_by_country <- clean_player_data_current %>% 
+  group_by(country) %>% 
+  summarize(total = n())
+  
+view(grouped_by_country)
+```
+
