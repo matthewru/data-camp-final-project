@@ -7,9 +7,10 @@ output: html_document
 knitr::opts_chunk$set(echo = FALSE)
 library(tidyverse)
 library(countrycode)
+library(lubridate)
 ```
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 raw_player_data <- read_csv("player_overviews.csv")
 raw_player_data_current <- read_csv("atp_players.csv", col_names = c("player_id", "first_name", "last_name", "hand", "birth_date", "country_code"))
 clean_player_data_current <- raw_player_data_current %>% 
@@ -18,10 +19,63 @@ clean_player_data_current <- raw_player_data_current %>%
   filter(!is.na(birth_date)) %>% 
   filter(!is.na(country))
 
+clean_player_data <- subset(raw_player_data, weight_lbs != 0 | height_inches != 0)
+clean_player_data <- clean_player_data %>% 
+  drop_na(handedness) %>% 
+  drop_na(height_inches) %>% 
+  drop_na(weight_lbs)
+clean_player_data <- subset(clean_player_data, weight_lbs != 1488)
+clean_player_data <- subset(clean_player_data, height_inches != 0)
+clean_player_data <- subset(clean_player_data, height_inches != 1)
+```
+
+```{r}
 grouped_by_country <- clean_player_data_current %>% 
   group_by(country) %>% 
-  summarize(total = n())
-  
-view(grouped_by_country)
+  summarize(total = n()) %>% 
+  arrange(desc(total)) %>% 
+  slice(1:10)
+
+ggplot(data = grouped_by_country, 
+       mapping = aes(x = reorder(country, total), y = total)) + 
+  geom_col(fill = if_else(grouped_by_country$country == "United States","#5F8FF5" , "#1f61f0")) + 
+  coord_flip() + 
+  labs(title = "Top 10 Countries With the Largest Amount of Pro ATP Tennis Players", 
+       subtitle = "USA easily takes the lead, followed by a few European Countries", 
+       x = "Country (From Highest to Least)", 
+       y = "Total Native Players", 
+       caption = "Jeff Sackmann: ATP Players") + 
+  theme_classic() + 
+  scale_y_continuous(breaks = c(1000, 2000, 3000, 4000, 5000))
 ```
+
+```{r}
+grouped_by_month <- clean_player_data_current %>% 
+  mutate(month = month.abb[month(birth_date)]) %>% 
+  group_by(month) %>% 
+  summarize(total = n()) %>% 
+  arrange(desc(total))
+ggplot(data = grouped_by_month, 
+       mapping = aes(x = reorder(month, total), y = total)) + 
+  geom_col(fill = "#ff6340") + 
+  labs(title = "ATP Pro Tennis Player Birth Month Distribution", 
+       subtitle = "The most common birth month is January,\nhowever the difference is not too drastically different.", 
+       x = "Month", 
+       y = "Number of ATP players", 
+       caption = "Jeff Sackmann: ATP Players")
+```
+
+```{r}
+ggplot(data = clean_player_data, 
+       mapping = aes(x = height_inches, y = weight_lbs, color = handedness)) + 
+  geom_jitter(size = 0.7) + 
+  labs(title = "Distribution of Weight and Height of ATP Pro Tennis Players", 
+       subtitle = "Largest cluster around 6 feet and 170 pounds", 
+       x = "Height in Inches", 
+       y = "Weight in Pounds", 
+       color = "Hand Dominance", 
+       caption = "Datahub.io: ATP Player Overview")
+```
+
+
 
