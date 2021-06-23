@@ -1,0 +1,23 @@
+---
+title: "About this site"
+description: |
+  Some additional details about the website
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## About Me
+
+I'm **Matthew Ru**, a rising sophomore at Naperville North High School in Naperville, Illinois. After coding for a couple years, I'm familiar with languages like Python, Java, a bit of C++ and now I am able to add R to that.
+
+## About the Project
+
+This *Analysis of Pro Tennis Players* is a call to my interest and love for the sport. Although I am not too involved in the pro-scene and watching the sport, this project demonstrates the kind of similarities throughout the pro-scene. By taking the data of many pro players including their hand dominance, country of origin, height, weight, and birth month, I've put together this complete analysis to provide some insight into the current pro-scene. 
+
+
+
+
+
+[Kane’s Free High School Data Science Bootcamp](https://bootcamp.davidkane.info)

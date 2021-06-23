@@ -1,0 +1,35 @@
+---
+title: "Analysis of Pro Tennis Players"
+description: |
+  An arrangement of graphs to show the relationship between height, weight, birth month, and country of origin in the tennis pro-scene.
+author:
+  - name: Matthew Ru
+date: "`r Sys.Date()`"
+site: distill::distill_website
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+library(tidyverse)
+
+```
+
+```{r}
+countryBarGraph <- readRDS("country.rds")
+
+countryBarGraph
+```
+
+```{r}
+birthMonthGraph <- readRDS("birthmonth.rds")
+
+birthMonthGraph
+```
+
+```{r}
+heightWeightHandednessPlot <- readRDS("heightWeightHandednessPlot.rds")
+
+heightWeightHandednessPlot
+```
+
