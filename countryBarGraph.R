@@ -12,7 +12,7 @@ final_plot <- ggplot(data = grouped_by_country,
        mapping = aes(x = reorder(country, total), y = total)) + 
   geom_col(fill = if_else(grouped_by_country$country == "United States","#5F8FF5" , "#1f61f0")) + 
   coord_flip() + 
-  labs(title = "Top 10 Countries With the Largest Amount of Pro ATP Tennis Players", 
+  labs(title = "Top 10 Countries With the Largest Amount of\nPro ATP Tennis Players", 
        subtitle = "USA easily takes the lead, followed by a few European Countries", 
        x = "Country (From Highest to Least)", 
        y = "Total Native Players", 
